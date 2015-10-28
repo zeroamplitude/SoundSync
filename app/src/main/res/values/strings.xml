@@ -4,6 +4,7 @@
 
 
     <string name="start_label">Start</string>
-
+    <string name="btnHost">Connect as Host</string>
+    <string name="btnPeer">Connect as Peer</string>
     <string name="test">Working</string>
 </resources>
