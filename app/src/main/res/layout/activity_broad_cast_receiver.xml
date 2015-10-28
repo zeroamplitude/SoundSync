@@ -7,7 +7,7 @@
     tools:context="net.uoit.distributedsystems.soundsync.BroadCastReceiverActivity">
 
     <TextView
-        android:text="@string/hello_world"
+        android:text="@string/test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

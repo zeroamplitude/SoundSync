@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">SoundSync</string>
+    <string name="title_activity_broad_cast_receiver">Broadcast Receiver</string>
+
+
     <string name="start_label">Start</string>
+
+    <string name="test">Working</string>
 </resources>
