@@ -7,4 +7,5 @@
     <string name="btnHost">Connect as Host</string>
     <string name="btnPeer">Connect as Peer</string>
     <string name="test">Working</string>
+    <string name="title_activity_discover_peers">DiscoverPeersActivity</string>
 </resources>

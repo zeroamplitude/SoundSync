@@ -27,6 +27,11 @@
         </activity>
         <activity android:name=".WifiDirectActivity" >
         </activity>
+        <activity
+            android:name=".DiscoverPeersActivity"
+            android:label="@string/title_activity_discover_peers"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
