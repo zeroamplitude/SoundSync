@@ -43,8 +43,10 @@ public class BroadCastReceiverActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-         reciever = new BCReceiver();
+        reciever = new WiFiDirectBroadcastReceiver();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

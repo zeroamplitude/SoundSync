@@ -10,12 +10,12 @@ import android.util.Log;
 /**
  * Created by ubuntu on 28/10/15.
  */
-public class BCReceiver extends BroadcastReceiver {
+public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     WifiP2pManager mManager;
     WifiP2pManager.Channel mChannel;
 
-    public BCReceiver(WifiP2pManager mManager, WifiP2pManager.Channel channel) {
+    public WiFiDirectBroadcastReceiver(WifiP2pManager mManager, WifiP2pManager.Channel channel) {
         this.mManager = mManager;
         this.mChannel = channel;
     }
@@ -42,6 +42,7 @@ public class BCReceiver extends BroadcastReceiver {
             // Connection state changed!  We should probably do something about
             // that.
 
+
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
                     .findFragmentById(R.id.frag_list);
@@ -50,4 +51,6 @@ public class BCReceiver extends BroadcastReceiver {
 
         }
     }
+
+
 }
