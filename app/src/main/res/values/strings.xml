@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SoundSync</string>
+    <string name="title_activity_broad_cast_receiver">BroadCastReceiverActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
