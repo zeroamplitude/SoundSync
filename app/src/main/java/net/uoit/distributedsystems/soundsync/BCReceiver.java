@@ -11,6 +11,6 @@ public class BCReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //TODO Receive things here
+        //TODO Receive things
     }
 }
