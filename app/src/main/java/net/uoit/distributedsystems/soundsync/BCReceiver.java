@@ -3,6 +3,8 @@ package net.uoit.distributedsystems.soundsync;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.util.Log;
 
 /**
  * Created by ubuntu on 28/10/15.
@@ -10,11 +12,11 @@ import android.content.Intent;
 public class BCReceiver extends BroadcastReceiver {
 
     WifiP2pManager mManager;
-    WifiP2pManager.Channel channel;
+    WifiP2pManager.Channel mChannel;
 
     public BCReceiver(WifiP2pManager mManager, WifiP2pManager.Channel channel) {
         this.mManager = mManager;
-        this.channel = channel;
+        this.mChannel = channel;
     }
 
     @Override
