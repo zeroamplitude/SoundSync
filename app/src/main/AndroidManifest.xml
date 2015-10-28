@@ -26,8 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BroadCastReceiverActivity"
-            android:label="@string/title_activity_broad_cast_receiver" >
+            android:name=".BroadCastReceiverActivity">
         </activity>
     </application>
 

@@ -1,15 +1,21 @@
 package net.uoit.distributedsystems.soundsync;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.nio.channels.Channel;
+
 public class BroadCastReceiverActivity extends Activity {
 
     private final IntentFilter intentFilter = new IntentFilter();
+    WifiP2pManager mManager;
+    WifiP2pManager.Channel mChannel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,10 @@ public class BroadCastReceiverActivity extends Activity {
 
         // Indicates the state of Wi-Fi P2P connectivity has changed.
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mManager.initialize(this, getMainLooper(), null);
+
     }
 
     @Override
