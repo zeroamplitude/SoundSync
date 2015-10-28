@@ -38,6 +38,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             } else {
                 activity.setIsWifiP2pEnabled(false);
             }
+        }
 
         if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
             // Check to see if Wi-Fi is enabled and notify appropriate activity
@@ -50,6 +51,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
+}
 
 //    public WiFiDirectBroadcastReceiver(WifiP2pManager mManager, Channel channel) {
 //        this.mManager = mManager;
@@ -80,5 +82,3 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 //        }
 //    }
 
-
-}
