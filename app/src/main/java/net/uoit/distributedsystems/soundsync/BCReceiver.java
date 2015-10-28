@@ -12,6 +12,14 @@ import android.util.Log;
  */
 public class BCReceiver extends BroadcastReceiver {
 
+    WifiP2pManager mManager;
+    WifiP2pManager.Channel mChannel;
+
+    public BCReceiver(WifiP2pManager mManager, WifiP2pManager.Channel channel) {
+        this.mManager = mManager;
+        this.mChannel = channel;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
