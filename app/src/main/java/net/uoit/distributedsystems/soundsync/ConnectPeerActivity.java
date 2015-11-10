@@ -2,6 +2,7 @@ package net.uoit.distributedsystems.soundsync;
 
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +15,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConnectPeerActivity extends ConnectP2PActivity {
+public class ConnectPeerActivity extends ConnectP2PActivity implements WifiP2pManager.PeerListListener {
 
     private IntentFilter intentFilter;
     private WifiP2pManager mManager;
@@ -56,5 +57,10 @@ public class ConnectPeerActivity extends ConnectP2PActivity {
             result.add(peer);
         }
         return result;
+    }
+
+    @Override
+    public void onPeersAvailable(WifiP2pDeviceList peers) {
+
     }
 }
