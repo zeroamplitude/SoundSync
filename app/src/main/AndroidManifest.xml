@@ -28,8 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConnectHostActivity" >
-        </activity>
         <activity
             android:name=".DiscoverPeersActivity"
             android:label="@string/title_activity_discover_peers"
@@ -38,7 +36,20 @@
         <activity
             android:name=".ConnectPeerActivity"
             android:label="@string/title_activity_connect_peer"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.uoit.distributedsystems.soundsync.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ConnectHostActivity"
+            android:label="@string/title_activity_connect_host"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.uoit.distributedsystems.soundsync.MainActivity" />
         </activity>
     </application>
 
