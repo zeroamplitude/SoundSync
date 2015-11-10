@@ -15,7 +15,9 @@ public class PeerViewHolder extends RecyclerView.ViewHolder {
 
     public PeerViewHolder(View itemView) {
         super(itemView);
-        vName = (TextView) vAddress.findViewById(R.id)
+        vName = (TextView) itemView.findViewById(R.id.lblDeviceName);
+        vAddress = (TextView) itemView.findViewById(R.id.lblDeviceAddress);
 
     }
+
 }
