@@ -34,5 +34,10 @@ public class PeerAdapter extends RecyclerView.Adapter<PeerViewHolder> {
     public int getItemCount() {
         return 0;
     }
+
+    public void updatePeerList(List<Peer> peers) {
+        this.peerList = peers;
+        notifyDataSetChanged();
+    }
 }
 

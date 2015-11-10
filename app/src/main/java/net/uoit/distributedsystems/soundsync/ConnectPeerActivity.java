@@ -2,6 +2,7 @@ package net.uoit.distributedsystems.soundsync;
 
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ public class ConnectPeerActivity extends ConnectP2PActivity implements WifiP2pMa
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private BroadcastReceiver mReceiver;
+    private PeerAdapter peerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +45,19 @@ public class ConnectPeerActivity extends ConnectP2PActivity implements WifiP2pMa
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         peerlist.setLayoutManager(linearLayoutManager);
 
-        PeerAdapter peerAdapter = new PeerAdapter(createList(30));
+        peerAdapter = new PeerAdapter(new ArrayList<Peer>());
         peerlist.setAdapter(peerAdapter);
-    }
-
-    private List<Peer> createList(int size) {
-
-        List<Peer> result = new ArrayList<Peer>();
-        for (int i=1; i <= size; i++) {
-            Peer peer = new Peer();
-            peer.name = peer.NAME_PREFIX + i;
-            peer.address = peer.ADDRESS_PREFIX + i;
-            result.add(peer);
-        }
-        return result;
     }
 
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peers) {
-
+        List<Peer> peersList = new ArrayList<Peer>();
+        for (WifiP2pDevice device: peers.getDeviceList()) {
+            Peer peer = new Peer();
+            peer.name = device.deviceName;
+            peer.address = device.deviceAddress;
+            peersList.add(peer);
+        }
+        peerAdapter.updatePeerList(peersList);
     }
 }
