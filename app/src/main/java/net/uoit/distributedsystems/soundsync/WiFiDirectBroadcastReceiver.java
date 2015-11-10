@@ -21,31 +21,32 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
 
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                       Activity activity) {
+                                       WifiP2pManager.PeerListListener listener, Activity activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
         this.activity = activity;
-        this.peerListListener = new WifiP2pManager.PeerListListener() {
-            @Override
-            public void onPeersAvailable(WifiP2pDeviceList peers) {
-                System.out.print(peers.toString());
-                WifiP2pDevice device = peers.getDeviceList().iterator().next();
-                WifiP2pConfig config = new WifiP2pConfig();
-                config.deviceAddress = device.deviceAddress;
-                mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        System.out.print("connected");
-                    }
-
-                    @Override
-                    public void onFailure(int reason) {
-
-                    }
-                });
-            }
-        };
+        this.peerListListener = listener;
+//                new WifiP2pManager.PeerListListener() {
+//            @Override
+//            public void onPeersAvailable(WifiP2pDeviceList peers) {
+//                System.out.print(peers.toString());
+//                WifiP2pDevice device = peers.getDeviceList().iterator().next();
+//                WifiP2pConfig config = new WifiP2pConfig();
+//                config.deviceAddress = device.deviceAddress;
+//                mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+//                    @Override
+//                    public void onSuccess() {
+//                        System.out.print("connected");
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int reason) {
+//
+//                    }
+//                });
+//            }
+//        };
     }
 
     @Override
