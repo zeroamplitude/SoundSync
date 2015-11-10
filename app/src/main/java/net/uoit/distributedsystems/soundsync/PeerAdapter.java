@@ -2,13 +2,13 @@ package net.uoit.distributedsystems.soundsync;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-
 import java.util.List;
+
 
 /**
  * Created by ubuntu on 10/11/15.
  */
-public class PeerAdapter extends RecyclerView.Adapter<PeerAdapter.PeerViewHolder> {
+public class PeerAdapter extends RecyclerView.Adapter<PeerViewHolder> {
     private List<Peer> peerList;
 
     public PeerAdapter(List<Peer> peerList){
@@ -16,12 +16,12 @@ public class PeerAdapter extends RecyclerView.Adapter<PeerAdapter.PeerViewHolder
     }
 
     @Override
-    public PeerAdapterPeerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;.
+    public PeerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(PeerAdapter.PeerViewHolder holder, int position) {
+    public void onBindViewHolder(PeerViewHolder holder, int position) {
 
     }
 
