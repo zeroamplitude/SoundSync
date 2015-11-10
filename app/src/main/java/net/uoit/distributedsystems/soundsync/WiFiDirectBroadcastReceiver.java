@@ -1,5 +1,6 @@
 package net.uoit.distributedsystems.soundsync;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,12 +16,12 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    private ConnectHostActivity activity;
+    private Activity activity;
     private WifiP2pManager.PeerListListener peerListListener;
 
 
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                       ConnectHostActivity activity) {
+                                       Activity activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
@@ -56,9 +57,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // the Activity.
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
             if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-                activity.setIsWifiP2pEnabled(true);
+//                activity.setIsWifiP2pEnabled(true);
             } else {
-                activity.setIsWifiP2pEnabled(false);
+//                activity.setIsWifiP2pEnabled(false);
             }
         }
 

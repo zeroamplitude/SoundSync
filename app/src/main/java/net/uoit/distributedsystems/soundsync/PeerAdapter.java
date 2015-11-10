@@ -19,15 +19,15 @@ public class PeerAdapter extends RecyclerView.Adapter<PeerViewHolder> {
 
     @Override
     public PeerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_peer, parent, false);
         return new PeerViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(PeerViewHolder holder, int position) {
         Peer p = peerList.get(position);
-        PeerViewHolder.vName.setText(p.name);
-        PeerViewHolder.vAddress.setText(p.address);
+        holder.vName.setText(p.name);
+        holder.vAddress.setText(p.address);
     }
 
     @Override

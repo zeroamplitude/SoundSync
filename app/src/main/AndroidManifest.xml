@@ -43,7 +43,7 @@
                 android:value="net.uoit.distributedsystems.soundsync.MainActivity" />
         </activity>
         <activity
-            android:name=".ConnectHostActivity"
+            android:name=".ConnectP2PActivity"
             android:label="@string/title_activity_connect_host"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" >

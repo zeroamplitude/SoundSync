@@ -16,13 +16,13 @@ public class MainActivity extends Activity {
     }
 
     public void connectHost(View view) {
-        Intent intent = new Intent(this, ConnectHostActivity.class);
+        Intent intent = new Intent(this, ConnectP2PActivity.class);
 
         startActivity(intent);
     }
 
     public void connectPeer(View view){
-        Intent intent = new Intent(this, ConnectHostActivity.class);
+        Intent intent = new Intent(this, ConnectP2PActivity.class);
 
         startActivity(intent);
     }
