@@ -3,6 +3,7 @@ package net.uoit.distributedsystems.soundsync;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 
 import java.nio.channels.Channel;
@@ -13,15 +14,22 @@ import java.nio.channels.Channel;
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
-    private Channel mChannel;
+    private WifiP2pManager.Channel mChannel;
     private WifiDirectActivity activity;
+    private WifiP2pManager.PeerListListener peerListListener;
 
-    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
+    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
                                        WifiDirectActivity activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
         this.activity = activity;
+        this.peerListListener = new WifiP2pManager.PeerListListener() {
+            @Override
+            public void onPeersAvailable(WifiP2pDeviceList peers) {
+                System.out.print(peers.toString());
+            }
+        };
     }
 
     @Override
@@ -43,6 +51,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // Check to see if Wi-Fi is enabled and notify appropriate activity
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             // Call WifiP2pManager.requestPeers() to get a list of current peers
+            if (mManager != null) {
+                mManager.requestPeers((WifiP2pManager.Channel) mChannel, peerListListener);
+            }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {

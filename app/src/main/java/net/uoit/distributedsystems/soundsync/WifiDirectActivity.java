@@ -11,11 +11,11 @@ import android.view.MenuItem;
 
 import java.nio.channels.Channel;
 
-public class WifiDirectActivity extends AppCompatActivity {
+public class WifiDirectActivity extends AppCompatActivity implements WifiP2pManager.ActionListener {
 
     private IntentFilter intentFilter;
     private WifiP2pManager mManager;
-    private Channel mChannel;
+    private WifiP2pManager.Channel mChannel;
     private BroadcastReceiver mReceiver;
 
     @Override
@@ -34,8 +34,9 @@ public class WifiDirectActivity extends AppCompatActivity {
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel = (Channel) mManager.initialize(this, getMainLooper(), null);
+        mChannel = mManager.initialize(this, getMainLooper(), null);
         mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+        mManager.discoverPeers((WifiP2pManager.Channel) mChannel, this);
     }
 
     /* register the broadcast receiver with the intent values to be matched */
@@ -75,5 +76,15 @@ public class WifiDirectActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void onFailure(int reason) {
+
     }
 }
