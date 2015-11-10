@@ -18,11 +18,8 @@ import java.util.List;
 
 public class ConnectPeerActivity extends ConnectP2PActivity implements WifiP2pManager.PeerListListener {
 
-    private IntentFilter intentFilter;
-    private WifiP2pManager mManager;
-    private WifiP2pManager.Channel mChannel;
-    private BroadcastReceiver mReceiver;
     private PeerAdapter peerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +44,9 @@ public class ConnectPeerActivity extends ConnectP2PActivity implements WifiP2pMa
 
         peerAdapter = new PeerAdapter(new ArrayList<Peer>());
         peerlist.setAdapter(peerAdapter);
+
+        mReceiver
+        mManager.discoverPeers(mChannel, this);
     }
 
     @Override

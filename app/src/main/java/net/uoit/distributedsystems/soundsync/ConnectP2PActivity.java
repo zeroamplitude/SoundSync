@@ -35,8 +35,8 @@ public class ConnectP2PActivity extends AppCompatActivity implements WifiP2pMana
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
-        mManager.discoverPeers(mChannel, this);
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel);
+
     }
 
     /* register the broadcast receiver with the intent values to be matched */
