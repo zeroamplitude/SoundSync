@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.nio.channels.Channel;
+import net.uoit.distributedsystems.soundsync.tools.network.WiFiDirectBroadcastReceiver;
 
 public class ConnectP2PActivity extends AppCompatActivity implements WifiP2pManager.ActionListener {
 

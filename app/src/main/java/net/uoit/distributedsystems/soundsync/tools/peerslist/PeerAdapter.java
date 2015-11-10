@@ -1,9 +1,11 @@
-package net.uoit.distributedsystems.soundsync;
+package net.uoit.distributedsystems.soundsync.tools.peerslist;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import net.uoit.distributedsystems.soundsync.R;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package net.uoit.distributedsystems.soundsync;
+package net.uoit.distributedsystems.soundsync.tools.network;
 
 import android.net.wifi.p2p.WifiP2pManager;
 
