@@ -10,4 +10,11 @@
     tools:showIn="@layout/activity_connect_peer"
     tools:context="net.uoit.distributedsystems.soundsync.ConnectPeerActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/peerlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
+
+
 </RelativeLayout>
