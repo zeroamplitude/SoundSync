@@ -5,15 +5,12 @@
     <uses-permission
         android:name="android.permission.INTERNET"
         android:required="true" />
-
     <uses-permission
         android:name="android.permission.ACCESS_WIFI_STATE"
         android:required="true" />
-
     <uses-permission
         android:name="android.permission.CHANGE_WIFI_STATE"
         android:required="true" />
-
     <uses-permission
         android:name="android.permission.INTERNET"
         android:required="true" />
@@ -24,7 +21,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-
         <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,12 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".WifiDirectActivity" >
+        <activity android:name=".ConnectHost" >
         </activity>
         <activity
             android:name=".DiscoverPeersActivity"
             android:label="@string/title_activity_discover_peers"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".ConnectPeer"
+            android:label="@string/title_activity_connect_peer"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>

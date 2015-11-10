@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 
-import java.nio.channels.Channel;
-
 /**
  * Created by ubuntu on 28/10/15.
  */
@@ -15,11 +13,11 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    private WifiDirectActivity activity;
+    private ConnectHost activity;
     private WifiP2pManager.PeerListListener peerListListener;
 
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                       WifiDirectActivity activity) {
+                                       ConnectHost activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
