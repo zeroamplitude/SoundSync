@@ -3,6 +3,8 @@ package net.uoit.distributedsystems.soundsync;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pConfig;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 
@@ -16,6 +18,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private ConnectHost activity;
     private WifiP2pManager.PeerListListener peerListListener;
 
+
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
                                        ConnectHost activity) {
         super();
@@ -26,6 +29,20 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             @Override
             public void onPeersAvailable(WifiP2pDeviceList peers) {
                 System.out.print(peers.toString());
+                WifiP2pDevice device = peers.getDeviceList().iterator().next();
+                WifiP2pConfig config = new WifiP2pConfig();
+                config.deviceAddress = device.deviceAddress;
+                mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+                    @Override
+                    public void onSuccess() {
+                        System.out.print("connected");
+                    }
+
+                    @Override
+                    public void onFailure(int reason) {
+
+                    }
+                });
             }
         };
     }
