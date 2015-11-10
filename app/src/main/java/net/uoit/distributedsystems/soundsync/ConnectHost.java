@@ -9,19 +9,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.uoit.distributedsystems.soundsync.tools.network.NetworkReceiver;
+
 import java.nio.channels.Channel;
 
 public class ConnectHost extends AppCompatActivity implements WifiP2pManager.ActionListener {
 
     private IntentFilter intentFilter;
-    private WifiP2pManager mManager;
-    private WifiP2pManager.Channel mChannel;
-    private BroadcastReceiver mReceiver;
+    public WifiP2pManager mManager;
+    public WifiP2pManager.Channel mChannel;
+    public NetworkReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wifi_direct);
 
         intentFilter = new IntentFilter();
         //  Indicates a change in the Wi-Fi P2P status.
@@ -35,7 +36,7 @@ public class ConnectHost extends AppCompatActivity implements WifiP2pManager.Act
 
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+        mReceiver = new NetworkReceiver(mManager, mChannel, this);
         mManager.discoverPeers((WifiP2pManager.Channel) mChannel, this);
     }
 
