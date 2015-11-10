@@ -3,6 +3,7 @@ package net.uoit.distributedsystems.soundsync;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends Activity {
 
@@ -12,16 +13,18 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent intent = new Intent(this, ConnectHost.class);
-
-        startActivity(intent);
-
-
     }
 
-    public void start() {
+    public void connectHost(View view) {
+        Intent intent = new Intent(this, ConnectHostActivity.class);
 
+        startActivity(intent);
+    }
+
+    public void connectPeer(View view){
+        Intent intent = new Intent(this, ConnectHostActivity.class);
+
+        startActivity(intent);
     }
 
 

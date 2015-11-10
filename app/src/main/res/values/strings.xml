@@ -9,4 +9,5 @@
     <string name="test">Working</string>
     <string name="title_activity_discover_peers">DiscoverPeersActivity</string>
     <string name="title_activity_connect_peer">ConnectPeer</string>
+    <string name="title_activity_connect_host">ConnectHost</string>
 </resources>

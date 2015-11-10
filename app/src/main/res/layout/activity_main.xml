@@ -25,6 +25,7 @@
         android:layout_marginEnd="40sp"
         android:id="@+id/connectHost"
         android:text="@string/btnHost"
+        android:onClick="connectHost"
         android:background="@color/colorPrimaryDark"
         android:textColor="@color/textColorLight"
         android:layout_weight="0.15" />
@@ -43,6 +44,7 @@
         android:layout_marginEnd="40sp"
         android:id="@+id/connectPeer"
         android:text="@string/btnPeer"
+        android:onClick="connectPeer"
         android:background="@color/colorPrimaryDark"
         android:textColor="@color/textColorLight"
         android:layout_weight="0.15" />
