@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import java.nio.channels.Channel;
 
-public class ConnectHost extends AppCompatActivity implements WifiP2pManager.ActionListener {
+public class ConnectHostActivity extends AppCompatActivity implements WifiP2pManager.ActionListener {
 
     private IntentFilter intentFilter;
     private WifiP2pManager mManager;

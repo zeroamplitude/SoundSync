@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ConnectHost" >
+        <activity android:name=".ConnectHostActivity" >
         </activity>
         <activity
             android:name=".DiscoverPeersActivity"
@@ -36,7 +36,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".ConnectPeer"
+            android:name=".ConnectPeerActivity"
             android:label="@string/title_activity_connect_peer"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
