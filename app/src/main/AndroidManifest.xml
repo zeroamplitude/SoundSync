@@ -21,30 +21,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
+        <activity android:name=".StartActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".peer.ConnectPeerActivity"
-            android:label="@string/title_activity_connect_peer"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.uoit.distributedsystems.soundsync.MainActivity" />
-        </activity>
-        <activity
-            android:name=".ConnectP2PActivity"
-            android:label="@string/title_activity_connect_host"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.uoit.distributedsystems.soundsync.MainActivity" />
         </activity>
     </application>
 

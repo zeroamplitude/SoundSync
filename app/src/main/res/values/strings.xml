@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">SoundSync</string>
+    <string name="service_name">SoundSync</string>
+
+
+
     <string name="title_activity_broad_cast_receiver">Broadcast Receiver</string>
 
 
@@ -10,4 +14,6 @@
     <string name="title_activity_discover_peers">DiscoverPeersActivity</string>
     <string name="title_activity_connect_peer">ConnectPeer</string>
     <string name="title_activity_connect_host">ConnectHost</string>
+
+
 </resources>
