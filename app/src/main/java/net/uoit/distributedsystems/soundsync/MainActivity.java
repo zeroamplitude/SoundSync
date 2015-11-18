@@ -19,15 +19,15 @@ import android.app.Fragment;
 import android.os.Bundle;
 
 import net.uoit.distributedsystems.soundsync.chat.ChatManager;
-import net.uoit.distributedsystems.soundsync.chat.WiFiChatFragment;
-import net.uoit.distributedsystems.soundsync.chat.WiFiChatFragment.MessageTarget;
+import net.uoit.distributedsystems.soundsync.chat.ChatFragment;
+import net.uoit.distributedsystems.soundsync.chat.ChatFragment.MessageTarget;
 import net.uoit.distributedsystems.soundsync.client.ClientSocketHandler;
 import net.uoit.distributedsystems.soundsync.network.WifiDirectBrodcastReciever;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.DeviceClickListener;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.WifiDeviceAdapter;
 import net.uoit.distributedsystems.soundsync.network.WifiP2PService;
-import net.uoit.distributedsystems.soundsync.server.GroupOwnerSocketHandler;
+import net.uoit.distributedsystems.soundsync.server.ServerSocketHandler;
 
 import android.os.Handler;
 import android.util.Log;
@@ -38,7 +38,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WifiServiceDiscoveryActivity extends Activity implements
+public class MainActivity extends Activity implements
         DeviceClickListener, ConnectionInfoListener, Handler.Callback, MessageTarget {
 
     public static final String TAG = "DiscoveryService";
@@ -62,7 +62,7 @@ public class WifiServiceDiscoveryActivity extends Activity implements
     private Handler handler = new Handler(this);
     private WifiServicesList servicesList;
 
-    private WiFiChatFragment chatFragment;
+    private ChatFragment chatFragment;
 
     private TextView statusTxtView;
 
@@ -77,7 +77,7 @@ public class WifiServiceDiscoveryActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wifi_service_discovery);
+        setContentView(R.layout.activity_main);
         statusTxtView = (TextView) findViewById(R.id.status_text);
 
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -286,7 +286,7 @@ public class WifiServiceDiscoveryActivity extends Activity implements
             Log.d(TAG, "Connected ad group owner");
 
             try {
-                handler = new GroupOwnerSocketHandler(this.getHandler());
+                handler = new ServerSocketHandler(this.getHandler());
                 handler.start();
             } catch (IOException e) {
                 Log.d(TAG, "Failed to create a server thread - " + e.getMessage());
@@ -297,7 +297,7 @@ public class WifiServiceDiscoveryActivity extends Activity implements
             handler = new ClientSocketHandler(this.getHandler(), info.groupOwnerAddress);
             handler.start();
         }
-        chatFragment = new WiFiChatFragment();
+        chatFragment = new ChatFragment();
         getFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
         statusTxtView.setVisibility(View.GONE);
     }

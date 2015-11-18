@@ -3,7 +3,7 @@ package net.uoit.distributedsystems.soundsync.server;
 import android.os.Handler;
 import android.util.Log;
 
-import net.uoit.distributedsystems.soundsync.WifiServiceDiscoveryActivity;
+import net.uoit.distributedsystems.soundsync.MainActivity;
 import net.uoit.distributedsystems.soundsync.chat.ChatManager;
 
 import java.io.IOException;
@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by nicholas on 17/11/15.
  */
-public class GroupOwnerSocketHandler extends Thread {
+public class ServerSocketHandler extends Thread {
 
-    private static final String TAG = "GroupOwnerSocketHandler";
+    private static final String TAG = "ServerSocketHandler";
 
     private Handler handler;
 
@@ -29,9 +29,9 @@ public class GroupOwnerSocketHandler extends Thread {
             new LinkedBlockingQueue<Runnable>());
 
 
-    public GroupOwnerSocketHandler(Handler handler) throws IOException {
+    public ServerSocketHandler(Handler handler) throws IOException {
         try {
-            socket = new ServerSocket(WifiServiceDiscoveryActivity.SERVER_PORT);
+            socket = new ServerSocket(MainActivity.SERVER_PORT);
             this.handler = handler;
         } catch (IOException e) {
             e.printStackTrace();

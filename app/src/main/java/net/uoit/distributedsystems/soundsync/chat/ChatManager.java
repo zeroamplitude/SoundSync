@@ -3,7 +3,7 @@ package net.uoit.distributedsystems.soundsync.chat;
 import android.os.Handler;
 import android.util.Log;
 
-import net.uoit.distributedsystems.soundsync.WifiServiceDiscoveryActivity;
+import net.uoit.distributedsystems.soundsync.MainActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +37,7 @@ public class ChatManager implements Runnable {
             byte[] buffer = new byte[1024];
             int bytes;
 
-            handler.obtainMessage(WifiServiceDiscoveryActivity.MY_HANDLE, this).sendToTarget();
+            handler.obtainMessage(MainActivity.MY_HANDLE, this).sendToTarget();
 
             while (true) {
                 try {
@@ -47,7 +47,7 @@ public class ChatManager implements Runnable {
                     }
 
                     Log.d(TAG, "Rec: " + String.valueOf(buffer));
-                    handler.obtainMessage(WifiServiceDiscoveryActivity.MESSAGE_READ,
+                    handler.obtainMessage(MainActivity.MESSAGE_READ,
                             bytes, -1, buffer).sendToTarget();
                 } catch (IOException e) {
                     Log.e(TAG, "Disconnected", e);

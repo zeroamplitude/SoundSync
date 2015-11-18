@@ -20,7 +20,7 @@ import java.util.List;
  * This fragment handles chat related UI which includes a list view for messages
  * and a message entry field with send button.
  */
-public class WiFiChatFragment extends Fragment {
+public class ChatFragment extends Fragment {
     private View view;
     private ChatManager chatManager;
     private TextView chatLine;

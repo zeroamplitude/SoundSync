@@ -3,7 +3,7 @@ package net.uoit.distributedsystems.soundsync.client;
 import android.os.Handler;
 import android.util.Log;
 
-import net.uoit.distributedsystems.soundsync.WifiServiceDiscoveryActivity;
+import net.uoit.distributedsystems.soundsync.MainActivity;
 import net.uoit.distributedsystems.soundsync.chat.ChatManager;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class ClientSocketHandler extends Thread {
         try {
             socket.bind(null);
             socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
-                    WifiServiceDiscoveryActivity.SERVER_PORT), 5000);
+                    MainActivity.SERVER_PORT), 5000);
             Log.d(TAG, "Launching I/O handler");
             chat = new ChatManager(socket, handler);
             new Thread(chat).start();
