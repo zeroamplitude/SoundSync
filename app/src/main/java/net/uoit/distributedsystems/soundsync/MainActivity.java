@@ -29,6 +29,7 @@ import net.uoit.distributedsystems.soundsync.network.WifiServicesList.DeviceClic
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.WifiDeviceAdapter;
 import net.uoit.distributedsystems.soundsync.network.WifiP2PService;
 import net.uoit.distributedsystems.soundsync.server.ServerSocketHandler;
+import net.uoit.distributedsystems.soundsync.sound.SoundFragment;
 import net.uoit.distributedsystems.soundsync.sound.SelectSong;
 
 import android.os.Handler;
@@ -46,11 +47,15 @@ public class MainActivity extends Activity implements
     public static final String TAG = "DiscoveryService";
 
     public static final String TXTRECORD_PROP_AVAILABLE =  "available";
-    public static final String SERVICE_INSTANCE = "_soundsync";
+    public static final String SERVICE_INSTANCE = "SoundSync";
     public static final String SERVICE_REG_TYPE = "_presence._tcp";
 
     public static final int MESSAGE_READ = 0x400 + 1;
     public static final int MY_HANDLE = 0x400 + 2;
+
+    public static final int SOUND_STREAM = 0x400 + 3;
+    public static final int PLAYBACK_FINISHED = 0x400 + 4;
+
     private WifiP2pManager manager;
 
     // SERVER PORT
@@ -65,16 +70,9 @@ public class MainActivity extends Activity implements
     private WifiServicesList servicesList;
 
     private ChatFragment chatFragment;
+    private SoundFragment soundFragment;
 
     private TextView statusTxtView;
-
-    public Handler getHandler() {
-        return handler;
-    }
-
-    public void setHandler(Handler handler) {
-        this.handler = handler;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +89,12 @@ public class MainActivity extends Activity implements
         channel = manager.initialize(this, getMainLooper(), null);
         startRegistrationAndDiscovery();
 
-        servicesList = new WifiServicesList();
-        getFragmentManager().beginTransaction()
-                .add(R.id.container, servicesList, "services").commit();
+        soundFragment = new SoundFragment();
+        getFragmentManager().beginTransaction().add(R.id.container, soundFragment).commit();
+        statusTxtView.setVisibility(View.GONE);
+//        servicesList = new WifiServicesList();
+//        getFragmentManager().beginTransaction()
+//                .add(R.id.container, servicesList, "services").commit();
 
     }
 
@@ -228,6 +229,11 @@ public class MainActivity extends Activity implements
     }
 
     @Override
+    public Handler getHandler() {
+        return handler;
+    }
+
+    @Override
     public void connectP2P(WifiP2PService service) {
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = service.getDevice().deviceAddress;
@@ -261,26 +267,6 @@ public class MainActivity extends Activity implements
     }
 
     @Override
-    public boolean handleMessage(Message msg) {
-        switch (msg.what) {
-            case MESSAGE_READ:
-                byte[] readBuf = (byte[]) msg.obj;
-
-                // TODO: Change this area to read song buffer and play
-                String readMessage = new String(readBuf, 0, msg.arg1);
-                Log.d(TAG, readMessage);
-                (chatFragment).pushMessage("Buddy: " + readMessage);
-                break;
-
-            case MY_HANDLE:
-                Object obj = msg.obj;
-                (chatFragment).setChatManager((ChatManager) obj);
-        }
-
-        return true;
-    }
-
-    @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
         Thread handler = null;
 
@@ -302,6 +288,30 @@ public class MainActivity extends Activity implements
         chatFragment = new ChatFragment();
         getFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
         statusTxtView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        switch (msg.what) {
+            case MESSAGE_READ:
+                byte[] readBuf = (byte[]) msg.obj;
+
+                // TODO: Change this area to read song buffer and play
+                String readMessage = new String(readBuf, 0, msg.arg1);
+                Log.d(TAG, readMessage);
+                (chatFragment).pushMessage("Buddy: " + readMessage);
+                break;
+
+            case MY_HANDLE:
+                Object obj = msg.obj;
+                (chatFragment).setChatManager((ChatManager) obj);
+                break;
+
+            case SOUND_STREAM:
+
+        }
+
+        return true;
     }
 
     public void selectSong(View view) {

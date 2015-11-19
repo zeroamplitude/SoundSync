@@ -52,7 +52,7 @@ public class ChatFragment extends Fragment {
         return view;
     }
     public interface MessageTarget {
-        public Handler getHandler();
+        Handler getHandler();
     }
     public void setChatManager(ChatManager obj) {
         chatManager = obj;
