@@ -3,6 +3,7 @@ package net.uoit.distributedsystems.soundsync;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -28,6 +29,7 @@ import net.uoit.distributedsystems.soundsync.network.WifiServicesList.DeviceClic
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.WifiDeviceAdapter;
 import net.uoit.distributedsystems.soundsync.network.WifiP2PService;
 import net.uoit.distributedsystems.soundsync.server.ServerSocketHandler;
+import net.uoit.distributedsystems.soundsync.sound.SelectSong;
 
 import android.os.Handler;
 import android.util.Log;
@@ -300,5 +302,10 @@ public class MainActivity extends Activity implements
         chatFragment = new ChatFragment();
         getFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
         statusTxtView.setVisibility(View.GONE);
+    }
+
+    public void selectSong(View view) {
+        Intent startSelectSongActivity = new Intent(this, SelectSong.class);
+        startActivity(startSelectSongActivity);
     }
 }
