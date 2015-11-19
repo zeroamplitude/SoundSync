@@ -253,7 +253,7 @@ public class MainActivity extends Activity implements
 
             @Override
             public void onFailure(int reason) {
-                appendStatus("Failed when connection to service");
+                appendStatus("Failed on connection to service");
             }
         });
     }
@@ -267,12 +267,12 @@ public class MainActivity extends Activity implements
                 // TODO: Change this area to read song buffer and play
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 Log.d(TAG, readMessage);
-                 (chatFragment).pushMessage("Buddy: " + readMessage);
+                (chatFragment).pushMessage("Buddy: " + readMessage);
                 break;
 
             case MY_HANDLE:
                 Object obj = msg.obj;
-                 (chatFragment).setChatManager((ChatManager) obj);
+                (chatFragment).setChatManager((ChatManager) obj);
         }
 
         return true;
