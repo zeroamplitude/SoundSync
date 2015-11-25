@@ -4,10 +4,12 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
+import net.uoit.distributedsystems.soundsync.app.tools.decoder.AudioBufferListener;
+
 /**
  * Created by nicholas on 25/11/15.
  */
-public class AudioPlayer implements PlayerBufferListener{
+public class AudioPlayer implements PlayerBufferListener, AudioBufferListener{
 
     private static final int SAMPLE_RATE = 16000;
 
@@ -65,5 +67,8 @@ public class AudioPlayer implements PlayerBufferListener{
         return bufferSize;
     }
 
-
+    @Override
+    public void sendAudioBuffer(byte[] buffer) {
+        bufferToPlayer(buffer);
+    }
 }
