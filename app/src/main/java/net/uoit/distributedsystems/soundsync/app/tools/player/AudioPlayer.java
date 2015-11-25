@@ -1,25 +1,25 @@
 package net.uoit.distributedsystems.soundsync.app.tools.player;
 
 import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioTrack;
 
 import net.uoit.distributedsystems.soundsync.app.tools.decoder.AudioBufferListener;
+
+import static android.media.AudioManager.STREAM_MUSIC;
 
 /**
  * Created by nicholas on 25/11/15.
  */
 public class AudioPlayer implements PlayerBufferListener, AudioBufferListener{
 
-    private static final int SAMPLE_RATE = 16000;
+    private static final int SAMPLE_RATE = 82000;
 
     private AudioTrack audioTrack;
     private byte[] pcm;
     private int minBufferSize;
     private int bufferSize;
 
-    public AudioPlayer(int bufferSize) {
-        this.bufferSize = bufferSize;
+    public AudioPlayer() {
         this.minBufferSize = AudioTrack.getMinBufferSize(
                 SAMPLE_RATE,
                 AudioFormat.CHANNEL_OUT_MONO,
@@ -27,11 +27,11 @@ public class AudioPlayer implements PlayerBufferListener, AudioBufferListener{
         );
 
         this.audioTrack = new AudioTrack(
-                AudioManager.STREAM_MUSIC,
+                STREAM_MUSIC,
                 SAMPLE_RATE,
                 AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
-                this.bufferSize,
+                minBufferSize,
                 AudioTrack.MODE_STREAM
         );
     }

@@ -5,6 +5,7 @@ import android.media.MediaCodec;
 import android.media.MediaCodec.BufferInfo;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
+import android.util.Log;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -18,6 +19,8 @@ public class DecoderThread extends Thread {
 
     private AudioBufferListener listener;
 
+    private AssetFileDescriptor fd;
+
     private MediaExtractor extractor;
 
     private boolean inputEnded;
@@ -28,24 +31,26 @@ public class DecoderThread extends Thread {
 
         inputEnded = false;
 
+        this.fd = fd;
+
         extractor = new MediaExtractor();
         extractor.setDataSource(
                 fd.getFileDescriptor(),
                 fd.getStartOffset(),
                 fd.getLength()
         );
-        fd.close();
     }
 
     @Override
     public void run() {
+        Log.d("DECODER", String.valueOf(extractor.getTrackCount()));
         MediaFormat format = extractor.getTrackFormat(0);
         extractor.selectTrack(0);
 
         String mime = format.getString(MediaFormat.KEY_MIME);
 
         try {
-            MediaCodec codec = MediaCodec.createByCodecName(mime);
+            MediaCodec codec = MediaCodec.createDecoderByType(mime);
 
             codec.configure(
                     format,
@@ -59,24 +64,30 @@ public class DecoderThread extends Thread {
             ByteBuffer[] inputBuffers = codec.getInputBuffers();
             ByteBuffer[] outputBuffers = codec.getOutputBuffers();
 
-            for (;;) {
-                int inputBufferId = codec.dequeueInputBuffer(CODEC_TIMEOUT);
+            while(!inputEnded) {
+                int inputBufferId = codec.dequeueInputBuffer(-1);
                 if (inputBufferId >= 0) {
-                    inputBuffers[inputBufferId].clear();
-                    int bufferSize = extractor.readSampleData(inputBuffers[inputBufferId], 0);
-
+                    ByteBuffer dstBuf = inputBuffers[inputBufferId];
+                    int bufferSize = extractor.readSampleData(dstBuf, 0);
+                    long audioClipTime = 0;
                     if (bufferSize < 0) {
                         inputEnded = true;
                         bufferSize = 0;
+                    } else {
+                        audioClipTime = extractor.getSampleTime();
                     }
 
                     codec.queueInputBuffer(
                             inputBufferId,
                             0,
                             bufferSize,
-                            CODEC_TIMEOUT,
+                            audioClipTime,
                             inputEnded ? MediaCodec.BUFFER_FLAG_END_OF_STREAM : 0
                     );
+
+                    if (!inputEnded) {
+                        extractor.advance();
+                    }
                 }
                 BufferInfo bufferInfo = new BufferInfo();
                 int result = codec.dequeueOutputBuffer(bufferInfo, CODEC_TIMEOUT);
@@ -99,6 +110,9 @@ public class DecoderThread extends Thread {
                 }
 
             }
+
+            fd.close();
+
 
         } catch (IOException e) {
             e.printStackTrace();
