@@ -3,7 +3,6 @@ package net.uoit.distributedsystems.soundsync.app.tools.player;
 import android.media.AudioFormat;
 import android.media.AudioTrack;
 
-import net.uoit.distributedsystems.soundsync.app.tools.decoder.AudioBufferListener;
 
 import static android.media.AudioManager.STREAM_MUSIC;
 
@@ -11,7 +10,7 @@ import static android.media.AudioManager.STREAM_MUSIC;
  * Created by nicholas on 25/11/15.
  * Edited by matthew rosettis on 25/11/15.
  */
-public class AudioPlayer implements PlayerBufferListener, AudioBufferListener{
+public class AudioPlayer implements PlayerBufferListener {
 
     private static final int SAMPLE_RATE_STEREO = 44100;
 
@@ -66,10 +65,5 @@ public class AudioPlayer implements PlayerBufferListener, AudioBufferListener{
     @Override
     public int getBufferSize() {
         return bufferSize;
-    }
-
-    @Override
-    public void sendAudioBuffer(byte[] buffer) {
-        bufferToPlayer(buffer);
     }
 }
