@@ -9,6 +9,7 @@ import static android.media.AudioManager.STREAM_MUSIC;
 
 /**
  * Created by nicholas on 25/11/15.
+ * Edited by matthew rosettis on 25/11/15.
  */
 public class AudioPlayer implements PlayerBufferListener, AudioBufferListener{
 
