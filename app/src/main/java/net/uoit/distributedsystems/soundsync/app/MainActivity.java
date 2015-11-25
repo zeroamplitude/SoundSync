@@ -3,9 +3,8 @@ package net.uoit.distributedsystems.soundsync.app;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
+import android.content.res.AssetFileDescriptor;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -15,24 +14,20 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
-import android.os.Message;
 import android.app.Fragment;
 //import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import net.uoit.distributedsystems.soundsync.R;
-import net.uoit.distributedsystems.soundsync.app.chat.ChatManager;
 import net.uoit.distributedsystems.soundsync.app.chat.ChatFragment;
-import net.uoit.distributedsystems.soundsync.app.chat.ChatFragment.MessageTarget;
-import net.uoit.distributedsystems.soundsync.transport.PeerSocketHandler;
+import net.uoit.distributedsystems.soundsync.transport.Peer;
 import net.uoit.distributedsystems.soundsync.network.WifiDirectBrodcastReciever;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.DeviceClickListener;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.WifiDeviceAdapter;
 import net.uoit.distributedsystems.soundsync.network.WifiP2PService;
-import net.uoit.distributedsystems.soundsync.transport.ServerSocketHandler;
+import net.uoit.distributedsystems.soundsync.transport.Server;
 import net.uoit.distributedsystems.soundsync.app.audio.SoundFragment;
-import net.uoit.distributedsystems.soundsync.app.audio.SelectSong;
 
 import android.os.Handler;
 import android.util.Log;
@@ -44,7 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends Activity implements
-        DeviceClickListener, ConnectionInfoListener, Handler.Callback, MessageTarget {
+        DeviceClickListener, ConnectionInfoListener {
 
     public static final String TAG = "DiscoveryService";
 
@@ -52,29 +47,26 @@ public class MainActivity extends Activity implements
     public static final String SERVICE_INSTANCE = "SoundSync";
     public static final String SERVICE_REG_TYPE = "_presence._tcp";
 
-    public static final int MESSAGE_READ = 0x400 + 1;
-    public static final int MY_HANDLE = 0x400 + 2;
-
-    public static final int SOUND_STREAM = 0x400 + 3;
-    public static final int PLAYBACK_FINISHED = 0x400 + 4;
-
     private WifiP2pManager manager;
 
     // SERVER PORT
     public static final int SERVER_PORT = 4545;
 
     private final IntentFilter intentFilter = new IntentFilter();
+
     private Channel channel;
     private BroadcastReceiver receiver = null;
     private WifiP2pDnsSdServiceRequest serviceRequest;
-
-    private Handler handler = new Handler(this);
     private WifiServicesList servicesList;
 
-    private ChatFragment chatFragment;
     private SoundFragment soundFragment;
 
     private TextView statusTxtView;
+
+    Server server;
+    Peer peer;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,10 +220,6 @@ public class MainActivity extends Activity implements
         statusTxtView.setText(current + "\n" + status);
     }
 
-    @Override
-    public Handler getHandler() {
-        return handler;
-    }
 
     @Override
     public void connectP2P(WifiP2PService service) {
@@ -268,65 +256,36 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        Thread handler = null;
+        Thread thread = null;
+        String role = "";
 
         if (info.isGroupOwner) {
             Log.d(TAG, "Connected ad group owner");
 
+            role = "control";
+
             try {
-                handler = new ServerSocketHandler(this.getHandler());
-                handler.start();
+                AssetFileDescriptor fd = getAssets().openFd("audio1.mp3");
+
+                thread = new Server(fd);
+                thread.start();
             } catch (IOException e) {
                 Log.d(TAG, "Failed to create a server thread - " + e.getMessage());
                 return;
             }
+
         } else {
+
             Log.d(TAG, "Connected as Peer");
-            handler = new PeerSocketHandler(this.getHandler(), info.groupOwnerAddress);
-            handler.start();
+            role = "peer";
+            thread = new Peer(info.groupOwnerAddress);
+            thread.start();
+
         }
-        chatFragment = new ChatFragment();
-        getFragmentManager().beginTransaction().replace(R.id.container, chatFragment).commit();
+
+        soundFragment = SoundFragment.newInstance(role);
+        getFragmentManager().beginTransaction().replace(R.id.container, soundFragment).commit();
         statusTxtView.setVisibility(View.GONE);
     }
 
-    @Override
-    public boolean handleMessage(Message msg) {
-        switch (msg.what) {
-            case MESSAGE_READ:
-                byte[] readBuf = (byte[]) msg.obj;
-
-                // TODO: Change this area to read song buffer and play
-                String readMessage = new String(readBuf, 0, msg.arg1);
-                Log.d(TAG, readMessage);
-                (chatFragment).pushMessage("Buddy: " + readMessage);
-                break;
-
-            case MY_HANDLE:
-                Object obj = msg.obj;
-                (chatFragment).setChatManager((ChatManager) obj);
-                break;
-
-            case SOUND_STREAM:
-
-        }
-
-        return true;
-    }
-
-    public void selectSong(View view) {
-        Intent startSelectSongActivity = new Intent(this, SelectSong.class);
-        startActivityForResult(startSelectSongActivity, 2);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("Made it");
-        if (requestCode == 2 && resultCode == RESULT_OK) {
-            Uri file = Uri.parse(data.getStringExtra("file"));
-            soundFragment = SoundFragment.newInstance(file);
-            getFragmentManager().beginTransaction().replace(R.id.container, soundFragment).commit();
-            statusTxtView.setVisibility(View.GONE);
-        }
-    }
 }

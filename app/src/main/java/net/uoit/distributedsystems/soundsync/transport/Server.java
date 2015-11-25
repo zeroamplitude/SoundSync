@@ -1,8 +1,11 @@
 package net.uoit.distributedsystems.soundsync.transport;
 
+import android.content.res.AssetFileDescriptor;
+
+import net.uoit.distributedsystems.soundsync.app.MainActivity;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,17 +17,23 @@ import java.util.List;
  */
 public class Server extends Thread {
 
-    public static final int PORT = 2000;
-
     public static final int CAP_PEERS = 2;
 
     private ServerSocket socket;
 
     private List<Socket> peers;
 
+    private AssetFileDescriptor fd = null;
+
     public Server() throws IOException {
-        this.socket = new ServerSocket(PORT);
+        this.socket = new ServerSocket(MainActivity.SERVER_PORT);
         this.peers = new ArrayList<Socket>(CAP_PEERS);
+    }
+
+    public Server(AssetFileDescriptor fd) throws IOException {
+        this.socket = new ServerSocket(MainActivity.SERVER_PORT);
+        this.peers = new ArrayList<Socket>(CAP_PEERS);
+        this.fd = fd;
     }
 
     @Override
@@ -32,14 +41,19 @@ public class Server extends Thread {
        while (true) {
            try {
                peers.add(socket.accept());
+               Thread protocol = new Protocol(fd, );
            } catch (IOException e) {
                e.printStackTrace();
            }
        }
     }
 
-    public List<Socket> getPeers() {
-        return peers;
+    public boolean hasPeers() {
+        return peers.size() != 0;
+    }
+
+    public boolean isFull() {
+        return !(peers.size() < CAP_PEERS);
     }
 
     public void send(byte[] bytes) throws IOException {
@@ -49,7 +63,7 @@ public class Server extends Thread {
         }
     }
 
-    public ArrayList<byte[]> recieve() throws IOException {
+    public ArrayList<byte[]> receive() throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>(CAP_PEERS);
         for (Socket peer: peers) {
             BufferedInputStream in = new BufferedInputStream(peer.getInputStream());
@@ -63,4 +77,6 @@ public class Server extends Thread {
         }
         return bytes;
     }
+
+
 }

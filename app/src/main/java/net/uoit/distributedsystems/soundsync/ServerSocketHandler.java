@@ -1,4 +1,4 @@
-package net.uoit.distributedsystems.soundsync.transport;
+package net.uoit.distributedsystems.soundsync;
 
 import android.os.Handler;
 import android.util.Log;

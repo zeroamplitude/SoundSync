@@ -17,7 +17,7 @@ public class DecoderThread extends Thread {
 
     private final int CODEC_TIMEOUT = 5000;
 
-    private AudioBufferListener listener;
+    private BufferReadyListener listener;
 
     private AssetFileDescriptor fd;
 
@@ -25,7 +25,7 @@ public class DecoderThread extends Thread {
 
     private boolean inputEnded;
 
-    public DecoderThread(AudioBufferListener listener, AssetFileDescriptor fd)
+    public DecoderThread(AssetFileDescriptor fd, BufferReadyListener listener)
             throws IOException {
         this.listener = listener;
 
