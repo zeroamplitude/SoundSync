@@ -1,4 +1,4 @@
-package net.uoit.distributedsystems.soundsync.chat;
+package net.uoit.distributedsystems.soundsync.app.chat;
 
 
 import android.app.Fragment;

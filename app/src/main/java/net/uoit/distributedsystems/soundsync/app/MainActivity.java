@@ -1,10 +1,11 @@
-package net.uoit.distributedsystems.soundsync;
+package net.uoit.distributedsystems.soundsync.app;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -19,18 +20,19 @@ import android.app.Fragment;
 //import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import net.uoit.distributedsystems.soundsync.chat.ChatManager;
-import net.uoit.distributedsystems.soundsync.chat.ChatFragment;
-import net.uoit.distributedsystems.soundsync.chat.ChatFragment.MessageTarget;
-import net.uoit.distributedsystems.soundsync.client.ClientSocketHandler;
+import net.uoit.distributedsystems.soundsync.R;
+import net.uoit.distributedsystems.soundsync.app.chat.ChatManager;
+import net.uoit.distributedsystems.soundsync.app.chat.ChatFragment;
+import net.uoit.distributedsystems.soundsync.app.chat.ChatFragment.MessageTarget;
+import net.uoit.distributedsystems.soundsync.transport.PeerSocketHandler;
 import net.uoit.distributedsystems.soundsync.network.WifiDirectBrodcastReciever;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.DeviceClickListener;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.WifiDeviceAdapter;
 import net.uoit.distributedsystems.soundsync.network.WifiP2PService;
-import net.uoit.distributedsystems.soundsync.server.ServerSocketHandler;
-import net.uoit.distributedsystems.soundsync.sound.SoundFragment;
-import net.uoit.distributedsystems.soundsync.sound.SelectSong;
+import net.uoit.distributedsystems.soundsync.transport.ServerSocketHandler;
+import net.uoit.distributedsystems.soundsync.app.audio.SoundFragment;
+import net.uoit.distributedsystems.soundsync.app.audio.SelectSong;
 
 import android.os.Handler;
 import android.util.Log;
@@ -89,12 +91,10 @@ public class MainActivity extends Activity implements
         channel = manager.initialize(this, getMainLooper(), null);
         startRegistrationAndDiscovery();
 
-        soundFragment = new SoundFragment();
-        getFragmentManager().beginTransaction().add(R.id.container, soundFragment).commit();
-        statusTxtView.setVisibility(View.GONE);
-//        servicesList = new WifiServicesList();
-//        getFragmentManager().beginTransaction()
-//                .add(R.id.container, servicesList, "services").commit();
+//
+        servicesList = new WifiServicesList();
+        getFragmentManager().beginTransaction()
+                .add(R.id.container, servicesList, "services").commit();
 
     }
 
@@ -282,7 +282,7 @@ public class MainActivity extends Activity implements
             }
         } else {
             Log.d(TAG, "Connected as Peer");
-            handler = new ClientSocketHandler(this.getHandler(), info.groupOwnerAddress);
+            handler = new PeerSocketHandler(this.getHandler(), info.groupOwnerAddress);
             handler.start();
         }
         chatFragment = new ChatFragment();
@@ -316,6 +316,17 @@ public class MainActivity extends Activity implements
 
     public void selectSong(View view) {
         Intent startSelectSongActivity = new Intent(this, SelectSong.class);
-        startActivity(startSelectSongActivity);
+        startActivityForResult(startSelectSongActivity, 2);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("Made it");
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+            Uri file = Uri.parse(data.getStringExtra("file"));
+            soundFragment = SoundFragment.newInstance(file);
+            getFragmentManager().beginTransaction().replace(R.id.container, soundFragment).commit();
+            statusTxtView.setVisibility(View.GONE);
+        }
     }
 }

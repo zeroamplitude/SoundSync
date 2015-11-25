@@ -1,10 +1,10 @@
-package net.uoit.distributedsystems.soundsync.client;
+package net.uoit.distributedsystems.soundsync.transport;
 
 import android.os.Handler;
 import android.util.Log;
 
-import net.uoit.distributedsystems.soundsync.MainActivity;
-import net.uoit.distributedsystems.soundsync.chat.ChatManager;
+import net.uoit.distributedsystems.soundsync.app.MainActivity;
+import net.uoit.distributedsystems.soundsync.app.chat.ChatManager;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -14,16 +14,16 @@ import java.net.Socket;
 /**
  * Created by nicholas on 17/11/15.
  */
-public class ClientSocketHandler extends Thread {
+public class PeerSocketHandler extends Thread {
 
-    private static final String TAG = "ClientSocketHandler";
+    private static final String TAG = "PeerSocketHandler";
 
     private Handler handler;
     private InetAddress mAddress;
 
     private ChatManager chat;
 
-    public ClientSocketHandler(Handler handler, InetAddress mAddress) {
+    public PeerSocketHandler(Handler handler, InetAddress mAddress) {
         this.handler = handler;
         this.mAddress = mAddress;
     }

@@ -1,10 +1,10 @@
-package net.uoit.distributedsystems.soundsync.server;
+package net.uoit.distributedsystems.soundsync.transport;
 
 import android.os.Handler;
 import android.util.Log;
 
-import net.uoit.distributedsystems.soundsync.MainActivity;
-import net.uoit.distributedsystems.soundsync.chat.ChatManager;
+import net.uoit.distributedsystems.soundsync.app.MainActivity;
+import net.uoit.distributedsystems.soundsync.app.chat.ChatManager;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,18 +18,18 @@ import java.util.concurrent.TimeUnit;
 public class ServerSocketHandler extends Thread {
 
     private static final String TAG = "ServerSocketHandler";
-
     private Handler handler;
-
     ServerSocket socket = null;
-    private final int THREAD_COUNT = 10;
+
+    private final int THREAD_COUNT = 2;
+    private final int KEEP_ALIVE_TIME = 10;
 
     private final ThreadPoolExecutor pool = new ThreadPoolExecutor(
-            THREAD_COUNT, THREAD_COUNT, 10, TimeUnit.SECONDS,
+            THREAD_COUNT, THREAD_COUNT, KEEP_ALIVE_TIME, TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>());
 
-
     public ServerSocketHandler(Handler handler) throws IOException {
+
         try {
             socket = new ServerSocket(MainActivity.SERVER_PORT);
             this.handler = handler;

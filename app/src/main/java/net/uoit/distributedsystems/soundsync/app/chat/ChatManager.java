@@ -1,9 +1,9 @@
-package net.uoit.distributedsystems.soundsync.chat;
+package net.uoit.distributedsystems.soundsync.app.chat;
 
 import android.os.Handler;
 import android.util.Log;
 
-import net.uoit.distributedsystems.soundsync.MainActivity;
+import net.uoit.distributedsystems.soundsync.app.MainActivity;
 
 import java.io.IOException;
 import java.io.InputStream;

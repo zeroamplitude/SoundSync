@@ -1,4 +1,4 @@
-package net.uoit.distributedsystems.soundsync.sound;
+package net.uoit.distributedsystems.soundsync.app.audio;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,20 +27,11 @@ public class SelectSong extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK){
             Uri uri = data.getData();
-            try {
-                InputStream in = getContentResolver().openInputStream(uri);
-                byte[] inputData = getBytes(in);
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("byteArr", inputData);
-                setResult(RESULT_OK, returnIntent);
-            } catch (IOException ioe) {
-                System.out.print("Error: Unable to retrieve sound file");
-                ioe.printStackTrace();
-            } finally {
-                finish();
-            }
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("file", uri.toString());
+            setResult(RESULT_OK, returnIntent);
+            finish();
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public byte[] getBytes(InputStream inputStream) throws IOException {
