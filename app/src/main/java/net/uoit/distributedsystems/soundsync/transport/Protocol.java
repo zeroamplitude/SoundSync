@@ -1,28 +1,20 @@
 package net.uoit.distributedsystems.soundsync.transport;
 
 import android.content.res.AssetFileDescriptor;
-import android.os.Handler;
 import android.util.Log;
 
-import net.uoit.distributedsystems.soundsync.app.MainActivity;
 import net.uoit.distributedsystems.soundsync.app.tools.decoder.BufferReadyListener;
 import net.uoit.distributedsystems.soundsync.app.tools.decoder.DecoderThread;
 import net.uoit.distributedsystems.soundsync.app.tools.player.AudioPlayer;
-import net.uoit.distributedsystems.soundsync.app.tools.player.PlayerBufferListener;
-import net.uoit.distributedsystems.soundsync.transport.Peer;
-import net.uoit.distributedsystems.soundsync.transport.Server;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Created by nicholas on 19/11/15.
  */
-public class Protocol implements Runnable, BufferReadyListener, PlayerBufferListener{
+public class Protocol implements Runnable, BufferReadyListener{
 
     private static final String TAG = "Protocol";
 
@@ -31,21 +23,29 @@ public class Protocol implements Runnable, BufferReadyListener, PlayerBufferList
 
     private AudioPlayer player;
 
+    AssetFileDescriptor fd;
 
-    private PlayerBufferListener listener;
+    Thread sender;
+
+    BlockingQueue<SoundBuffer> msgQueue = new ArrayBlockingQueue<SoundBuffer>(1000);
+
+    int msgCount = 0;
 
     public Protocol(AssetFileDescriptor fd, Server server) throws IOException {
         this.server = server;
-        try {
-            player = new AudioPlayer();
+        player = new AudioPlayer();
+        this.fd = fd;
 
+        try {
             Thread decoder = new DecoderThread(fd, this);
             player.play();
             decoder.start();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        sender = new SendingThread();
+        sender.start();
     }
 
     public Protocol(Peer peer) throws IOException {
@@ -54,6 +54,9 @@ public class Protocol implements Runnable, BufferReadyListener, PlayerBufferList
 
         player = new AudioPlayer();
         player.play();
+
+        sender = new SendingThread();
+        sender.start();
     }
 
 
@@ -61,39 +64,80 @@ public class Protocol implements Runnable, BufferReadyListener, PlayerBufferList
     public void run() {
         try {
             while (true) {
-                byte[] bytes = peer.receive();
 
-                if (bytes == null) {
-                    break;
+                SoundBuffer soundBuffer;
+
+                if (peer != null) {
+                    soundBuffer = peer.receive();
+                    byte[] bytes = soundBuffer.getSound();
+                    if (bytes.length == 0)
+                        continue;
+
+//                    byte[] buffer = extractData(bytes);
+                    Log.d(TAG, "Received bytes: msg#: " + soundBuffer.getId());
+
+                    if (server.hasPeers()) {
+                        addToQueue(bytes);
+                    }
+
+                    player.bufferToPlayer(bytes);
+
                 }
-                if (server.hasPeers()) {
-                    server.send(bytes);
-                }
-                listener.bufferToPlayer(bytes);
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         } finally {
             try {
-                peer.close();
+                server.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    @Override
-    public void sendAudioBuffer(byte[] buffer) {
-        if(server.hasPeers())
+    public void addToQueue(final byte[] buffer) throws InterruptedException {
+
+        msgQueue.put(new SoundBuffer(msgCount, buffer));
+
+        msgCount++;
     }
 
     @Override
-    public void bufferToPlayer(byte[] buffer) {
+    public void sendAudioBuffer(final byte[] buffer) {
+
+        try {
+            addToQueue(buffer);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        player.bufferToPlayer(buffer);
 
     }
 
-    @Override
-    public int getBufferSize() {
-        return 0;
+    class SendingThread extends Thread {
+
+        public volatile boolean finished = false;
+
+        @Override
+        public void run() {
+
+            while (!finished) {
+                if (!msgQueue.isEmpty()) {
+                    try {
+
+                        SoundBuffer soundBuffer = msgQueue.take();
+                        server.send(soundBuffer);
+
+                    } catch (InterruptedException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        public void setFinished(boolean finished) {
+            this.finished = finished;
+        }
+
     }
 }

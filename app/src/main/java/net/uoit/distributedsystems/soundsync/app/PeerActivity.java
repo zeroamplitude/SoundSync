@@ -11,9 +11,7 @@ import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,34 +28,30 @@ import net.uoit.distributedsystems.soundsync.network.WifiServicesList.WifiDevice
 import net.uoit.distributedsystems.soundsync.transport.Peer;
 import net.uoit.distributedsystems.soundsync.transport.Server;
 
+
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends Activity implements
-        DeviceClickListener, ConnectionInfoListener {
+public class PeerActivity extends Activity implements DeviceClickListener, ConnectionInfoListener {
 
-    public static final String TAG = "DiscoveryService";
+    public static final String TAG = "Host";
 
     public static final String TXTRECORD_PROP_AVAILABLE =  "available";
     public static final String SERVICE_INSTANCE = "SoundSync";
-    public static final String SERVICE_REG_TYPE = "_presence._tcp";
-
-    private WifiP2pManager manager;
-
-    // SERVER PORT
-    public static final int SERVER_PORT = 4545;
 
     private final IntentFilter intentFilter = new IntentFilter();
 
-    private Channel channel;
-    private BroadcastReceiver receiver = null;
+    private WifiP2pManager manager;
+    private WifiP2pManager.Channel channel;
     private WifiP2pDnsSdServiceRequest serviceRequest;
-    private WifiServicesList servicesList;
+    private BroadcastReceiver receiver = null;
 
-    private SoundFragment soundFragment;
+
+    private WifiServicesList servicesList;
+    SoundFragment soundFragment;
 
     private TextView statusTxtView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +66,15 @@ public class MainActivity extends Activity implements
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
-        startRegistrationAndDiscovery();
+
+        discoverService();
+
+
 
 
         servicesList = new WifiServicesList();
         getFragmentManager().beginTransaction()
                 .add(R.id.container, servicesList, "services").commit();
-
     }
 
     @Override
@@ -120,28 +116,6 @@ public class MainActivity extends Activity implements
         }
 
         super.onStop();
-    }
-
-    private void startRegistrationAndDiscovery() {
-        Map<String, String> record = new HashMap<>();
-        record.put(TXTRECORD_PROP_AVAILABLE, "visible");
-
-        WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
-                SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
-        manager.addLocalService(channel, service, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                appendStatus("Added Local Service");
-            }
-
-            @Override
-            public void onFailure(int reason) {
-                appendStatus("Failed to add Service");
-            }
-        });
-
-        discoverService();
-
     }
 
     private void discoverService() {
@@ -210,7 +184,6 @@ public class MainActivity extends Activity implements
         String current = statusTxtView.getText().toString();
         statusTxtView.setText(current + "\n" + status);
     }
-
 
     @Override
     public void connectP2P(WifiP2PService service) {

@@ -6,6 +6,9 @@ import net.uoit.distributedsystems.soundsync.app.tools.player.PlayerBufferListen
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -18,6 +21,9 @@ public class Peer extends Thread {
 
     private Socket socket;
     private InetAddress mAddress;
+
+    InputStream is;
+    ObjectInputStream ois;
 
     private Protocol sound;
 
@@ -33,7 +39,11 @@ public class Peer extends Thread {
             socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
                     MainActivity.SERVER_PORT), 5000);
             sound = new Protocol(this);
+            is = socket.getInputStream();
+            ois = new ObjectInputStream(is);
             new Thread(sound).start();
+
+
         } catch (IOException e) {
             e.printStackTrace();
             try {
@@ -51,18 +61,24 @@ public class Peer extends Thread {
         out.write(bytes);
     }
 
-    public byte[] receive() throws IOException {
-        BufferedInputStream in = new BufferedInputStream(socket.getInputStream());
-        int size;
-        if ((size = in.available()) > 0) {
-            byte[] buffer = new byte[size];
-            int result = in.read(buffer);
-            return buffer;
+    public SoundBuffer receive() throws IOException {
+
+        SoundBuffer sb = null;
+        try {
+            Object o = ois.readObject();
+            ois.reset();
+            System.out.println(o.getClass().toString());
+            sb = (SoundBuffer) o;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        return new byte[0];
+
+        return sb;
     }
 
     public void close() throws IOException {
         socket.close();
+        ois.close();
+        is.close();
     }
 }
