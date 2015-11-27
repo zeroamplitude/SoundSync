@@ -8,10 +8,11 @@ import static android.media.AudioManager.STREAM_MUSIC;
 
 /**
  * Created by nicholas on 25/11/15.
+ * Edited by matthew rosettis on 25/11/15.
  */
 public class AudioPlayer implements PlayerBufferListener {
 
-    private static final int SAMPLE_RATE = 44100;
+    private static final int SAMPLE_RATE_STEREO = 44100;
 
     private AudioTrack audioTrack;
     private byte[] pcm;
@@ -20,7 +21,7 @@ public class AudioPlayer implements PlayerBufferListener {
 
     public AudioPlayer() {
         this.minBufferSize = AudioTrack.getMinBufferSize(
-                SAMPLE_RATE,
+                SAMPLE_RATE_STEREO,
                 AudioFormat.CHANNEL_OUT_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT
         );
@@ -28,7 +29,7 @@ public class AudioPlayer implements PlayerBufferListener {
 
         this.audioTrack = new AudioTrack(
                 STREAM_MUSIC,
-                SAMPLE_RATE,
+                SAMPLE_RATE_STEREO,
                 AudioFormat.CHANNEL_OUT_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 minBufferSize,
