@@ -10,7 +10,6 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
-import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +19,6 @@ import net.uoit.distributedsystems.soundsync.R;
 import net.uoit.distributedsystems.soundsync.app.audio.SoundFragment;
 import net.uoit.distributedsystems.soundsync.network.WifiDirectBrodcastReciever;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList;
-import net.uoit.distributedsystems.soundsync.transport.Peer;
-import net.uoit.distributedsystems.soundsync.transport.Server;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -147,8 +144,8 @@ public class HostActivity extends Activity implements ConnectionInfoListener {
             try {
                 AssetFileDescriptor fd = getAssets().openFd("audio1.mp3");
 
-                thread = new Server(fd);
-                thread.start();
+//                thread = new Server(fd);
+//                thread.start();
             } catch (IOException e) {
                 Log.d(TAG, "Failed to create a server thread - " + e.getMessage());
                 return;
@@ -158,8 +155,8 @@ public class HostActivity extends Activity implements ConnectionInfoListener {
 
             Log.d(TAG, "Connected as Peer");
             role = "peer";
-            thread = new Peer(info.groupOwnerAddress);
-            thread.start();
+//            thread = new Peer(info.groupOwnerAddress);
+//            thread.start();
 
         }
 

@@ -22,13 +22,14 @@ import android.widget.TextView;
 
 import net.uoit.distributedsystems.soundsync.R;
 import net.uoit.distributedsystems.soundsync.app.audio.SoundFragment;
+import net.uoit.distributedsystems.soundsync.app.peers.ControlPeer;
+import net.uoit.distributedsystems.soundsync.app.peers.ListenerPeer;
+import net.uoit.distributedsystems.soundsync.app.peers.Peer;
 import net.uoit.distributedsystems.soundsync.network.WifiDirectBrodcastReciever;
 import net.uoit.distributedsystems.soundsync.network.WifiP2PService;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.DeviceClickListener;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.WifiDeviceAdapter;
-import net.uoit.distributedsystems.soundsync.transport.Peer;
-import net.uoit.distributedsystems.soundsync.transport.Server;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -247,7 +248,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onConnectionInfoAvailable(WifiP2pInfo info) {
-        Thread thread = null;
+        Peer thread = null;
         String role = "";
 
         if (info.isGroupOwner) {
@@ -258,7 +259,7 @@ public class MainActivity extends Activity implements
             try {
                 AssetFileDescriptor fd = getAssets().openFd("audio1.mp3");
 
-                thread = new Server(fd);
+                thread = new ControlPeer(fd, MainActivity.SERVER_PORT);
                 thread.start();
             } catch (IOException e) {
                 Log.d(TAG, "Failed to create a server thread - " + e.getMessage());
@@ -269,10 +270,15 @@ public class MainActivity extends Activity implements
 
             Log.d(TAG, "Connected as Peer");
             role = "peer";
-            thread = new Peer(info.groupOwnerAddress);
-            thread.start();
-
+            try {
+                thread = new ListenerPeer(MainActivity.SERVER_PORT, info.groupOwnerAddress);
+                thread.start();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+
 
         soundFragment = SoundFragment.newInstance(role);
         getFragmentManager().beginTransaction().replace(R.id.container, soundFragment).commit();

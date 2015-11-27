@@ -25,9 +25,6 @@ import net.uoit.distributedsystems.soundsync.network.WifiP2PService;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.DeviceClickListener;
 import net.uoit.distributedsystems.soundsync.network.WifiServicesList.WifiDeviceAdapter;
-import net.uoit.distributedsystems.soundsync.transport.Peer;
-import net.uoit.distributedsystems.soundsync.transport.Server;
-
 
 import java.io.IOException;
 import java.util.Map;
@@ -231,7 +228,7 @@ public class PeerActivity extends Activity implements DeviceClickListener, Conne
             try {
                 AssetFileDescriptor fd = getAssets().openFd("audio1.mp3");
 
-                thread = new Server(fd);
+//                thread = new Server(fd);
                 thread.start();
             } catch (IOException e) {
                 Log.d(TAG, "Failed to create a server thread - " + e.getMessage());
@@ -242,7 +239,7 @@ public class PeerActivity extends Activity implements DeviceClickListener, Conne
 
             Log.d(TAG, "Connected as Peer");
             role = "peer";
-            thread = new Peer(info.groupOwnerAddress);
+//            thread = new Peer(info.groupOwnerAddress);
             thread.start();
 
         }

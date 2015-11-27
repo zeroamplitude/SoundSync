@@ -1,19 +1,12 @@
 package net.uoit.distributedsystems.soundsync.app.audio;
 
 import android.app.Fragment;
-import android.content.res.AssetFileDescriptor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import net.uoit.distributedsystems.soundsync.R;
-import net.uoit.distributedsystems.soundsync.app.tools.decoder.DecoderThread;
-import net.uoit.distributedsystems.soundsync.app.tools.player.AudioPlayer;
-import net.uoit.distributedsystems.soundsync.app.tools.player.PlayerBufferListener;
-import net.uoit.distributedsystems.soundsync.transport.Protocol;
-
-import java.io.IOException;
 
 /**
  * Created by nicholas on 19/11/15.
