@@ -8,6 +8,8 @@ import net.uoit.distributedsystems.soundsync.app.tools.decoder.DecoderThread;
 import net.uoit.distributedsystems.soundsync.app.tools.player.AudioPlayer;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -27,7 +29,8 @@ public class Protocol implements Runnable, BufferReadyListener{
 
     Thread sender;
 
-    BlockingQueue<SoundBuffer> msgQueue = new ArrayBlockingQueue<SoundBuffer>(1000);
+//    BlockingQueue<byte[]> msgQueue = new ArrayBlockingQueue<>(1000);
+    Queue<byte[]> msgQueue = new LinkedList<>();
 
     int msgCount = 0;
 
@@ -65,26 +68,26 @@ public class Protocol implements Runnable, BufferReadyListener{
         try {
             while (true) {
 
-                SoundBuffer soundBuffer;
+                byte[] soundBuffer;
 
                 if (peer != null) {
                     soundBuffer = peer.receive();
-                    byte[] bytes = soundBuffer.getSound();
+                    byte[] bytes = soundBuffer;
                     if (bytes.length == 0)
                         continue;
 
 //                    byte[] buffer = extractData(bytes);
-                    Log.d(TAG, "Received bytes: msg#: " + soundBuffer.getId());
+//                    Log.d(TAG, "Received bytes: msg#: " + soundBuffer.getId());
 
-                    if (server.hasPeers()) {
-                        addToQueue(bytes);
-                    }
+//                    if (server.hasPeers()) {
+//                        addToQueue(bytes);
+//                    }
 
                     player.bufferToPlayer(bytes);
 
                 }
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -97,7 +100,8 @@ public class Protocol implements Runnable, BufferReadyListener{
 
     public void addToQueue(final byte[] buffer) throws InterruptedException {
 
-        msgQueue.put(new SoundBuffer(msgCount, buffer));
+        msgQueue.put(buffer);
+        msgQueue.
 
         msgCount++;
     }
@@ -107,10 +111,13 @@ public class Protocol implements Runnable, BufferReadyListener{
 
         try {
             addToQueue(buffer);
+//            server.send(buffer);
         } catch (InterruptedException e) {
             e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
         }
-        player.bufferToPlayer(buffer);
+//        player.bufferToPlayer(buffer);
 
     }
 
@@ -125,7 +132,7 @@ public class Protocol implements Runnable, BufferReadyListener{
                 if (!msgQueue.isEmpty()) {
                     try {
 
-                        SoundBuffer soundBuffer = msgQueue.take();
+                        byte[] soundBuffer = msgQueue.take();
                         server.send(soundBuffer);
 
                     } catch (InterruptedException | IOException e) {

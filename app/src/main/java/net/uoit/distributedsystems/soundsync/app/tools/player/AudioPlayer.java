@@ -25,7 +25,7 @@ public class AudioPlayer implements PlayerBufferListener {
                 AudioFormat.CHANNEL_OUT_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT
         );
-        minBufferSize *= 1.5;
+//        minBufferSize = (int) (minBufferSize * .5);
 
         this.audioTrack = new AudioTrack(
                 STREAM_MUSIC,

@@ -40,7 +40,7 @@ public class Peer extends Thread {
                     MainActivity.SERVER_PORT), 5000);
             sound = new Protocol(this);
             is = socket.getInputStream();
-            ois = new ObjectInputStream(is);
+//            ois = new ObjectInputStream(is);
             new Thread(sound).start();
 
 
@@ -61,18 +61,17 @@ public class Peer extends Thread {
         out.write(bytes);
     }
 
-    public SoundBuffer receive() throws IOException {
+    public byte[] receive() throws IOException {
 
-        SoundBuffer sb = null;
-        try {
-            Object o = ois.readObject();
-            ois.reset();
-            System.out.println(o.getClass().toString());
-            sb = (SoundBuffer) o;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        byte[] sb = new byte[0];
+        int size;
+        if ((size =is.available()) > 0) {
+//            Object o = ois.readObject();
+//            System.out.println(o.getClass().toString());
+//            sb = (SoundBuffer) o;
+            sb = new byte[size];
+            int res = is.read(sb);
         }
-
         return sb;
     }
 

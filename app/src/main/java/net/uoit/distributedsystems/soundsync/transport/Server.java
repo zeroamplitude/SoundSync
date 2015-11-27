@@ -31,7 +31,7 @@ public class Server extends Thread {
 
     private ServerSocket socket;
 //    private List<Socket> peers;
-    private HashMap<Socket, ObjectOutputStream> peers;
+    private HashMap<Socket, OutputStream> peers;
 
     private AssetFileDescriptor fd = null;
 
@@ -58,7 +58,7 @@ public class Server extends Thread {
            try {
                pool.execute(new Protocol(fd, this));
                Socket soc = socket.accept();
-               peers.put(soc, new ObjectOutputStream(soc.getOutputStream()));
+               peers.put(soc, soc.getOutputStream());
            } catch (IOException e) {
                try {
                    if (socket != null && !socket.isClosed()) {
@@ -82,9 +82,9 @@ public class Server extends Thread {
         return !(peers.size() < CAP_PEERS);
     }
 
-    public void send(SoundBuffer bytes) throws IOException {
-        for(ObjectOutputStream peer : peers.values()) {
-            peer.writeObject(bytes);
+    public void send(byte[] bytes) throws IOException {
+        for(OutputStream peer : peers.values()) {
+            peer.write(bytes);
         }
     }
 
