@@ -51,6 +51,11 @@ public class ListenerPeer extends Peer implements PacketReadyListener {
 
     @Override
     public void onNewPacketReady(RtpPacket packet) {
+        if (packet.getHeader() == -2) {
+            sender.addClient(MainActivity.SERVER_PORT, packet.getAddress());
+            return;
+        }
+
         if (sender.hasRecipients()) {
             try {
                 sender.addMsg(packet.getHeader(), packet.getData());
@@ -58,6 +63,7 @@ public class ListenerPeer extends Peer implements PacketReadyListener {
                 e.printStackTrace();
             }
         }
+
         playerBufferListener.bufferToPlayer(packet.getData());
     }
 }

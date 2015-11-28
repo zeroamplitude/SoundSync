@@ -252,7 +252,7 @@ public class MainActivity extends Activity implements
         String role = "";
 
         if (info.isGroupOwner) {
-            Log.d(TAG, "Connected ad group owner");
+            Log.d(TAG, "Connected as group owner");
 
             role = "control";
 

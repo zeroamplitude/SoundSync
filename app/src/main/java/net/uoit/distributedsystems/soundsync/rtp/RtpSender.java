@@ -1,5 +1,7 @@
 package net.uoit.distributedsystems.soundsync.rtp;
 
+import net.uoit.distributedsystems.soundsync.app.MainActivity;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -47,6 +49,14 @@ public class RtpSender {
 
     public void addMsg(int id, byte[] data) throws InterruptedException {
         packager.addData(id, data);
+    }
+
+    public void sendAddClientMsg(InetAddress client, InetAddress host) throws IOException {
+        byte[] buf = client.toString().getBytes();
+        RtpPacket pack = new RtpPacket(-2, buf);
+        byte[] data = pack.encode();
+        DatagramPacket packet = new DatagramPacket(data, data.length, host, MainActivity.SERVER_PORT);
+        socket.send(packet);
     }
 
     public void addClient(int address, InetAddress port) {
