@@ -1,7 +1,3 @@
 # SoundSync
-A distributed sound system for android
+The SoundSync project is an Android smartphone application allowing users to stream audio content with their friends. The system implements a standard wifi-direct connection between devices. The following report outlines the backend design of the system including the design rationale and implementation of the various course concepts integrated within our app including: peer to peer networks, Syn ack ack protocol, device clock time synchronization (christians algorithm), and asynchronous message passing. Additionally this report will detail the elements of SoundSync that make this application a distributed system including but not limited to: heterogeneity, concurrency, no global clock, no global state, resource sharing, independant failures, scalability, and parallel activities.
 
-
-http://developer.android.com/training/connect-devices-wirelessly/wifi-direct.html#receiver
-
-https://stuff.mit.edu/afs/sipb/project/android/docs/guide/topics/connectivity/wifip2p.html
