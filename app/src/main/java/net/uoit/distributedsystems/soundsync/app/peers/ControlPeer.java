@@ -2,7 +2,6 @@ package net.uoit.distributedsystems.soundsync.app.peers;
 
 import android.content.res.AssetFileDescriptor;
 
-import net.uoit.distributedsystems.soundsync.app.MainActivity;
 import net.uoit.distributedsystems.soundsync.app.peers.tree.PeerTree;
 import net.uoit.distributedsystems.soundsync.app.tools.decoder.BufferReadyListener;
 import net.uoit.distributedsystems.soundsync.app.tools.decoder.DecoderThread;
